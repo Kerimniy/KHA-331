@@ -28,8 +28,6 @@ class Other:
                 loged_str = "0" + loged_str
         return loged_str
 
-   
-
 class NSConvert:
     @staticmethod
     def to_base(number: int, base: int) -> str:
@@ -68,6 +66,60 @@ class NSConvert:
         return output
 
 class Cryptography:
+    
+    global autoKey
+    autoKey = random.randint(1, 999999999)
+
+    @staticmethod
+    def encrypt_with_key(input_str, key):
+        bytes_data = input_str.encode('utf-8')
+        output = bytearray(len(bytes_data))
+        
+        for i in range(len(bytes_data)):
+            v = i % 8 + 1 + int(str(key)[0])
+            
+            int_byte = bytes_data[i]
+            
+            if i % 2 == 0:
+                int_byte = int_byte ^ key
+                int_byte = int_byte + key
+            else:
+                int_byte = int_byte ^ (key + v)
+                int_byte = int_byte + (key + v)
+                
+            output[i] = int_byte & 0xFF
+            
+        return bytes(output)
+
+    def encrypt(input_str):
+        global autoKey
+        return encrypt_with_key(input_str, autoKey)
+
+    @staticmethod
+    def decrypt_with_key(bytes_data, key):
+        output = bytearray(len(bytes_data))
+        
+        for i in range(len(bytes_data)):
+            v = i % 8 + 1 + int(str(key)[0])
+            
+            int_byte = bytes_data[i]
+            
+            if i % 2 == 0:
+                int_byte = int_byte - key
+                int_byte = int_byte ^ key
+            else:
+                int_byte = int_byte - (key + v)
+                int_byte = int_byte ^ (key + v)
+                
+            output[i] = int_byte & 0xFF
+            
+        return output.decode('utf-8')
+
+    @staticmethod
+    def decrypt(bytes_data):
+        global autoKey
+        return decrypt_with_key(bytes_data, autoKey)
+
     @staticmethod
     def get_hash_code(input_str: str) -> str:
         text = input_str

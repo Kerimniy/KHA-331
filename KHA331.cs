@@ -7,6 +7,123 @@ namespace KHA331
 {
     public static class Cryptography
     {
+        private static int autoKey = 0;
+
+        static Cryptography()
+        {
+            Random rand = new Random();
+            autoKey = rand.Next(1, 999999999);
+        }
+
+        public static byte[] EnCrypt(string input, int key)
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
+
+            int[] INTbytes1 = new int[bytes.Length];
+            byte[] output = new byte[bytes.Length];
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                int v = i % 8 + 1 + Convert.ToInt32(key.ToString()[0].ToString());
+
+                INTbytes1[i] = (int)bytes[i];
+                if (i % 2 == 0)
+                {
+                    INTbytes1[i] = INTbytes1[i] ^ key;
+                    INTbytes1[i] = INTbytes1[i] + key;
+                }
+                else
+                {
+                    INTbytes1[i] = INTbytes1[i] ^ (key + v);
+                    INTbytes1[i] = INTbytes1[i] + (key + v);
+                }
+                output[i] = (byte)INTbytes1[i];
+            }
+            return output;
+        }
+
+
+        public static byte[] EnCrypt(string input)
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(input);
+            int[] INTbytes1 = new int[bytes.Length];
+            byte[] output = new byte[bytes.Length];
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                int v = i % 8 + 1 + Convert.ToInt32(autoKey.ToString()[0].ToString());
+
+                INTbytes1[i] = (int)bytes[i];
+                if (i % 2 == 0)
+                {
+                    INTbytes1[i] = INTbytes1[i] ^ autoKey;
+                    INTbytes1[i] = INTbytes1[i] + autoKey;
+                }
+                else
+                {
+                    INTbytes1[i] = INTbytes1[i] ^ (autoKey + v);
+                    INTbytes1[i] = INTbytes1[i] + (autoKey + v);
+                }
+                output[i] = (byte)INTbytes1[i];
+
+            }
+            return output;
+        }
+
+
+        public static string DeCrypt(byte[] bytes, int key)
+        {
+            int[] INTbytesEN = new int[bytes.Length];
+
+            byte[] bytesEN = new byte[INTbytesEN.Length];
+
+            for (int i = 0; i < INTbytesEN.Length; i++)
+            {
+                int v = i % 8 + 1 + Convert.ToInt32(key.ToString()[0].ToString());
+                INTbytesEN[i] = bytes[i];
+                if (i % 2 == 0)
+                {
+                    INTbytesEN[i] = INTbytesEN[i] - key;
+                    INTbytesEN[i] = INTbytesEN[i] ^ key;
+                }
+                else
+                {
+                    INTbytesEN[i] = INTbytesEN[i] - (key + v);
+                    INTbytesEN[i] = INTbytesEN[i] ^ (key + v);
+                }
+                bytesEN[i] = (byte)INTbytesEN[i];
+            }
+            string output = Encoding.UTF8.GetString(bytesEN);
+
+            return output;
+        }
+
+
+        public static string DeCrypt(byte[] bytes)
+        {
+            int[] INTbytesEN = new int[bytes.Length];
+
+            byte[] bytesEN = new byte[INTbytesEN.Length];
+
+            for (int i = 0; i < INTbytesEN.Length; i++)
+            {
+                int v = i % 8 + 1 + Convert.ToInt32(autoKey.ToString()[0].ToString());
+                INTbytesEN[i] = bytes[i];
+                if (i % 2 == 0)
+                {
+                    INTbytesEN[i] = INTbytesEN[i] - autoKey;
+                    INTbytesEN[i] = INTbytesEN[i] ^ autoKey;
+                }
+                else
+                {
+                    INTbytesEN[i] = INTbytesEN[i] - (autoKey + v);
+                    INTbytesEN[i] = INTbytesEN[i] ^ (autoKey + v);
+                }
+                bytesEN[i] = (byte)INTbytesEN[i];
+            }
+            string output = Encoding.UTF8.GetString(bytesEN);
+
+            return output;
+        }
+
 
         public static string GetHashCode(string input)
         {
@@ -97,23 +214,31 @@ namespace KHA331
             return output;
         }
 
+
         private static double NumSum(double a)
         {
             return Other.NumSum(a);
         }
 
+
         private static byte ByteMedium(byte[] b)
         {
             return Other.ByteMedium(b);
         }
+
+
         private static string Last3Symbols(string a)
         {
             return Other.Last3Symbols(a);
         }
+
+
         private static string ToBase(ulong number, int _base)
         {
             return NSConvert.ToBase(number, _base);
         }
+
+
         private static ulong FromBase(string input, int _base)
         {
             return NSConvert.FromBase(input, _base);
