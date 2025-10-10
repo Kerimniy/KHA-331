@@ -1,4 +1,4 @@
-# KHA-331
-Simple Hash Algorithm (C# and Python)
-and
-Key encryption/decription
+# Cryptogryphy Lib
+  **Includes**
+* Simple Hash Algorithm KHA331 (C#)
+* Simple Encryption/Decription XOR algorithm (SEDA128) (C#)
